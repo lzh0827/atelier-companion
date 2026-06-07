@@ -1,0 +1,19 @@
+{
+  "name": "衣作防错台",
+  "short_name": "衣作",
+  "description": "服装制作项目、工序、防错检查和尺寸计算助手。",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#f6f7f5",
+  "theme_color": "#111312",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

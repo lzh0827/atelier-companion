@@ -1,0 +1,13 @@
+{
+  "name": "atelier-companion",
+  "version": "1.0.0",
+  "description": "A mobile-first PWA assistant for fashion design and garment construction.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

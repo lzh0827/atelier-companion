@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#111312" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="衣作" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>衣作防错台</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="衣作防错台">
+          <span class="brand-mark">衣</span>
+          <span class="brand-copy">
+            <strong>衣作防错台</strong>
+            <small>Atelier Companion</small>
+          </span>
+        </a>
+
+        <nav class="view-tabs" aria-label="工作区">
+          <button class="view-tab" type="button" data-view-target="dashboard">
+            <i data-lucide="layout-dashboard"></i>
+            <span>总览</span>
+          </button>
+          <button class="view-tab" type="button" data-view-target="checks">
+            <i data-lucide="shield-check"></i>
+            <span>防错</span>
+          </button>
+          <button class="view-tab" type="button" data-view-target="flow">
+            <i data-lucide="list-checks"></i>
+            <span>工序</span>
+          </button>
+          <button class="view-tab" type="button" data-view-target="studio">
+            <i data-lucide="scissors"></i>
+            <span>工作室</span>
+          </button>
+        </nav>
+
+        <div class="top-actions">
+          <button class="icon-button" id="copySummaryButton" type="button" title="复制项目摘要">
+            <i data-lucide="copy"></i>
+          </button>
+          <button class="icon-button" id="exportButton" type="button" title="导出数据">
+            <i data-lucide="download"></i>
+          </button>
+          <label class="icon-button file-action" title="导入数据">
+            <i data-lucide="upload"></i>
+            <input id="importInput" type="file" accept="application/json" />
+          </label>
+          <button class="icon-button primary" id="installButton" type="button" title="安装到主屏幕" hidden>
+            <i data-lucide="smartphone"></i>
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <section class="workspace-view active" id="dashboardView" data-view="dashboard">
+          <section class="cover-grid">
+            <article class="panel project-console">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">当前作品</p>
+                  <h1 id="projectTitle">新作品</h1>
+                </div>
+                <span class="phase-pill" id="phasePill">制版</span>
+              </div>
+
+              <form class="project-form" id="projectForm">
+                <label class="wide">
+                  作品名
+                  <input id="projectName" name="name" type="text" autocomplete="off" />
+                </label>
+                <label>
+                  品类
+                  <select id="garmentType" name="type"></select>
+                </label>
+                <label>
+                  阶段
+                  <select id="phaseSelect" name="phase"></select>
+                </label>
+                <label>
+                  截止日
+                  <input id="deadlineInput" name="deadline" type="date" />
+                </label>
+                <label>
+                  难度
+                  <select id="complexitySelect" name="complexity">
+                    <option value="sample">样衣试做</option>
+                    <option value="client">交付成衣</option>
+                    <option value="showpiece">展示/毕业作品</option>
+                  </select>
+                </label>
+                <label class="wide">
+                  款式备注
+                  <textarea id="briefInput" name="brief" rows="3"></textarea>
+                </label>
+              </form>
+
+              <div class="component-block">
+                <div class="mini-heading">
+                  <span>重点部件</span>
+                  <button class="ghost-button" id="selectCommonButton" type="button">常用组合</button>
+                </div>
+                <div class="component-grid" id="componentGrid"></div>
+              </div>
+            </article>
+
+            <aside class="visual-workbench">
+              <img src="assets/fashion-template.png" alt="正背面服装设计人体模板" />
+              <div class="visual-overlay">
+                <div>
+                  <p class="eyebrow">今日焦点</p>
+                  <h2 id="focusTitle">缝前巡检</h2>
+                </div>
+                <button class="text-button primary" type="button" data-view-target="checks">
+                  <i data-lucide="arrow-right"></i>
+                  进入防错
+                </button>
+              </div>
+            </aside>
+          </section>
+
+          <section class="status-grid">
+            <article class="panel">
+              <div class="panel-heading compact">
+                <div>
+                  <p class="eyebrow">进度</p>
+                  <h2>完成度</h2>
+                </div>
+                <strong class="large-number" id="progressNumber">0%</strong>
+              </div>
+              <div class="progress-track" aria-hidden="true"><span id="progressBar"></span></div>
+              <div class="metric-row" id="projectMetrics"></div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-heading compact">
+                <div>
+                  <p class="eyebrow">风险</p>
+                  <h2>高优先巡检</h2>
+                </div>
+                <button class="icon-button" type="button" data-view-target="checks" title="查看全部">
+                  <i data-lucide="external-link"></i>
+                </button>
+              </div>
+              <div class="priority-list" id="priorityList"></div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-heading compact">
+                <div>
+                  <p class="eyebrow">下一步</p>
+                  <h2>工序队列</h2>
+                </div>
+                <button class="icon-button" type="button" data-view-target="flow" title="查看工序">
+                  <i data-lucide="external-link"></i>
+                </button>
+              </div>
+              <div class="step-preview" id="stepPreview"></div>
+            </article>
+          </section>
+        </section>
+
+        <section class="workspace-view" id="checksView" data-view="checks">
+          <section class="tool-head">
+            <div>
+              <p class="eyebrow">防错检查</p>
+              <h1>拉链、口袋、裁片方向先过一遍</h1>
+            </div>
+            <div class="head-actions">
+              <button class="text-button" id="resetChecksButton" type="button">
+                <i data-lucide="rotate-ccw"></i>
+                重置勾选
+              </button>
+              <button class="text-button primary" id="addCheckToggle" type="button">
+                <i data-lucide="plus"></i>
+                添加
+              </button>
+            </div>
+          </section>
+
+          <section class="checks-layout">
+            <aside class="panel filter-panel">
+              <div class="panel-heading compact">
+                <div>
+                  <p class="eyebrow">范围</p>
+                  <h2>部件筛选</h2>
+                </div>
+              </div>
+              <div class="filter-list" id="componentFilters"></div>
+              <form class="inline-form hidden" id="customCheckForm">
+                <label>
+                  部件
+                  <select id="customCheckComponent"></select>
+                </label>
+                <label>
+                  检查项
+                  <input id="customCheckText" type="text" autocomplete="off" />
+                </label>
+                <label>
+                  备注
+                  <textarea id="customCheckDetail" rows="3"></textarea>
+                </label>
+                <button class="text-button primary" type="submit">
+                  <i data-lucide="save"></i>
+                  保存
+                </button>
+              </form>
+            </aside>
+
+            <article class="panel check-panel">
+              <div class="check-summary">
+                <div>
+                  <p class="eyebrow">本轮检查</p>
+                  <h2 id="checkSummaryTitle">0 / 0</h2>
+                </div>
+                <div class="score-ring" id="checkScore">0%</div>
+              </div>
+              <div class="check-groups" id="checkGroups"></div>
+            </article>
+          </section>
+        </section>
+
+        <section class="workspace-view" id="flowView" data-view="flow">
+          <section class="tool-head">
+            <div>
+              <p class="eyebrow">工序流程</p>
+              <h1>从量体到整烫的制作队列</h1>
+            </div>
+            <div class="head-actions">
+              <button class="text-button" id="loadTemplateStepsButton" type="button">
+                <i data-lucide="wand-sparkles"></i>
+                套用模板
+              </button>
+              <button class="text-button primary" id="addStepButton" type="button">
+                <i data-lucide="plus"></i>
+                新工序
+              </button>
+            </div>
+          </section>
+
+          <section class="flow-grid">
+            <article class="panel">
+              <div class="flow-board" id="flowBoard"></div>
+            </article>
+            <aside class="panel">
+              <div class="panel-heading compact">
+                <div>
+                  <p class="eyebrow">节奏</p>
+                  <h2>时间与复盘</h2>
+                </div>
+                <button class="icon-button" id="clearTimerButton" type="button" title="清除计时">
+                  <i data-lucide="timer-off"></i>
+                </button>
+              </div>
+              <div class="timer-box">
+                <strong id="timerDisplay">00:00</strong>
+                <div class="button-row">
+                  <button class="text-button primary" id="timerToggleButton" type="button">
+                    <i data-lucide="play"></i>
+                    开始
+                  </button>
+                  <button class="text-button" id="timerLapButton" type="button">
+                    <i data-lucide="flag"></i>
+                    记录
+                  </button>
+                </div>
+              </div>
+              <label class="note-label">
+                今天的手感
+                <textarea id="dailyNoteInput" rows="6"></textarea>
+              </label>
+              <div class="lap-list" id="lapList"></div>
+            </aside>
+          </section>
+        </section>
+
+        <section class="workspace-view" id="studioView" data-view="studio">
+          <section class="tool-head">
+            <div>
+              <p class="eyebrow">工作室</p>
+              <h1>尺寸、面料、计算和问题照片</h1>
+            </div>
+            <div class="segmented" role="tablist" aria-label="工作室面板">
+              <button class="segment active" data-studio-tab="measurements" type="button">尺寸</button>
+              <button class="segment" data-studio-tab="materials" type="button">面辅料</button>
+              <button class="segment" data-studio-tab="calculator" type="button">计算</button>
+              <button class="segment" data-studio-tab="issues" type="button">记录</button>
+            </div>
+          </section>
+
+          <section class="studio-tab active" id="measurementsTab" data-studio-panel="measurements">
+            <article class="panel">
+              <div class="panel-heading compact">
+                <div>
+                  <p class="eyebrow">尺寸档案</p>
+                  <h2>量体与放松量</h2>
+                </div>
+                <button class="text-button" id="resetMeasurementsButton" type="button">
+                  <i data-lucide="rotate-ccw"></i>
+                  默认
+                </button>
+              </div>
+              <div class="measurement-table" id="measurementTable"></div>
+            </article>
+          </section>
+
+          <section class="studio-tab" id="materialsTab" data-studio-panel="materials">
+            <article class="panel">
+              <div class="panel-heading compact">
+                <div>
+                  <p class="eyebrow">面辅料</p>
+                  <h2>采购与准备</h2>
+                </div>
+                <button class="text-button primary" id="addMaterialButton" type="button">
+                  <i data-lucide="plus"></i>
+                  新增
+                </button>
+              </div>
+              <div class="material-list" id="materialList"></div>
+            </article>
+          </section>
+
+          <section class="studio-tab" id="calculatorTab" data-studio-panel="calculator">
+            <section class="calculator-grid">
+              <article class="panel">
+                <div class="panel-heading compact">
+                  <div>
+                    <p class="eyebrow">用料</p>
+                    <h2>面料估算</h2>
+                  </div>
+                  <i class="heading-icon" data-lucide="ruler"></i>
+                </div>
+                <form class="calc-form" id="fabricCalcForm">
+                  <label>
+                    面料幅宽 cm
+                    <input id="fabricWidthInput" type="number" min="60" step="1" />
+                  </label>
+                  <label>
+                    衣长/裙长 cm
+                    <input id="garmentLengthInput" type="number" min="0" step="1" />
+                  </label>
+                  <label>
+                    袖长/裤长 cm
+                    <input id="sleeveLengthInput" type="number" min="0" step="1" />
+                  </label>
+                  <label>
+                    倒毛/格纹
+                    <select id="napSelect">
+                      <option value="no">无</option>
+                      <option value="yes">有</option>
+                    </select>
+                  </label>
+                </form>
+                <div class="result-box" id="fabricResult"></div>
+              </article>
+
+              <article class="panel">
+                <div class="panel-heading compact">
+                  <div>
+                    <p class="eyebrow">缝份</p>
+                    <h2>折边换算</h2>
+                  </div>
+                  <i class="heading-icon" data-lucide="move-horizontal"></i>
+                </div>
+                <form class="calc-form" id="seamCalcForm">
+                  <label>
+                    净尺寸 cm
+                    <input id="cleanSizeInput" type="number" min="0" step="0.1" />
+                  </label>
+                  <label>
+                    单边缝份 cm
+                    <input id="seamAllowanceInput" type="number" min="0" step="0.1" />
+                  </label>
+                  <label>
+                    折边量 cm
+                    <input id="hemAllowanceInput" type="number" min="0" step="0.1" />
+                  </label>
+                  <label>
+                    部位
+                    <select id="seamAreaSelect"></select>
+                  </label>
+                </form>
+                <div class="result-box" id="seamResult"></div>
+              </article>
+
+              <article class="panel">
+                <div class="panel-heading compact">
+                  <div>
+                    <p class="eyebrow">拉链</p>
+                    <h2>开口匹配</h2>
+                  </div>
+                  <i class="heading-icon" data-lucide="grip-vertical"></i>
+                </div>
+                <form class="calc-form" id="zipperCalcForm">
+                  <label>
+                    开口长度 cm
+                    <input id="openingLengthInput" type="number" min="0" step="0.5" />
+                  </label>
+                  <label>
+                    止口预留 cm
+                    <input id="zipStopInput" type="number" min="0" step="0.1" />
+                  </label>
+                  <label>
+                    类型
+                    <select id="zipperTypeSelect">
+                      <option value="invisible">隐形拉链</option>
+                      <option value="regular">普通拉链</option>
+                      <option value="separating">开尾拉链</option>
+                    </select>
+                  </label>
+                  <label>
+                    位置
+                    <select id="zipperPositionSelect">
+                      <option value="centerBack">后中</option>
+                      <option value="sideSeam">侧缝</option>
+                      <option value="front">前中</option>
+                    </select>
+                  </label>
+                </form>
+                <div class="result-box" id="zipperResult"></div>
+              </article>
+            </section>
+          </section>
+
+          <section class="studio-tab" id="issuesTab" data-studio-panel="issues">
+            <section class="issue-grid">
+              <article class="panel">
+                <div class="panel-heading compact">
+                  <div>
+                    <p class="eyebrow">问题记录</p>
+                    <h2>照片与修正</h2>
+                  </div>
+                  <button class="text-button primary" id="saveIssueButton" type="button">
+                    <i data-lucide="save"></i>
+                    保存
+                  </button>
+                </div>
+                <form class="issue-form" id="issueForm">
+                  <label>
+                    部件
+                    <select id="issueAreaSelect"></select>
+                  </label>
+                  <label>
+                    问题
+                    <input id="issueTitleInput" type="text" autocomplete="off" />
+                  </label>
+                  <label class="wide">
+                    修正方案
+                    <textarea id="issueFixInput" rows="4"></textarea>
+                  </label>
+                  <label class="wide file-drop">
+                    <i data-lucide="camera"></i>
+                    <span id="photoLabel">选择或拍摄照片</span>
+                    <input id="issuePhotoInput" type="file" accept="image/*" capture="environment" />
+                  </label>
+                </form>
+              </article>
+              <article class="panel">
+                <div class="panel-heading compact">
+                  <div>
+                    <p class="eyebrow">复盘库</p>
+                    <h2>已记录问题</h2>
+                  </div>
+                  <button class="icon-button" id="clearIssuesButton" type="button" title="清空问题">
+                    <i data-lucide="trash-2"></i>
+                  </button>
+                </div>
+                <div class="issue-list" id="issueList"></div>
+              </article>
+            </section>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <div class="toast" id="toast" role="status"></div>
+  </body>
+</html>

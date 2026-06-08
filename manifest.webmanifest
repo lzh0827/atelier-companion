@@ -1,7 +1,7 @@
 {
-  "name": "衣作防错台",
+  "name": "衣作 Studio",
   "short_name": "衣作",
-  "description": "服装制作项目、工序、防错检查和尺寸计算助手。",
+  "description": "服装设计学生的课业、工序、防错、工艺速查和作品集助手。",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",

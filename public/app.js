@@ -180,6 +180,69 @@ const DEFECT_GUIDES = {
   }
 };
 
+const TOOL_FILTERS = [
+  { id: "all", label: "全部" },
+  { id: "plan", label: "计划" },
+  { id: "pattern", label: "版型" },
+  { id: "craft", label: "工艺" },
+  { id: "show", label: "展示" }
+];
+
+const PATTERN_PIECES = [
+  "前片", "后片", "袖片", "领片", "贴边", "腰头", "袋布", "里布", "粘衬", "下摆样板"
+];
+
+const PHOTO_SHOTS = [
+  "正面全身", "背面全身", "侧面轮廓", "领口/门襟细节", "拉链/口袋细节", "试穿过程", "纸样过程", "面料小样"
+];
+
+const SAMPLE_TESTS = [
+  "缩水测试", "熨烫温度", "针距线迹", "缝份厚度", "水洗掉色", "垂坠照片"
+];
+
+const SEAM_PRESETS = {
+  light: { label: "薄料/雪纺", side: "0.7 cm", zipper: "1.2 cm", hem: "0.6-1.5 cm 卷边", tip: "先试卷边，必要时垫纸车缝。" },
+  woven: { label: "普通梭织", side: "1.0 cm", zipper: "1.5 cm", hem: "3.0 cm", tip: "课堂样衣最稳的通用方案。" },
+  coat: { label: "厚料/外套", side: "1.2-1.5 cm", zipper: "1.5 cm", hem: "4.0 cm", tip: "交叉缝位削薄，先烫开再合里布。" },
+  knit: { label: "针织/弹力", side: "0.7-1.0 cm", zipper: "不常用", hem: "2.0-3.0 cm", tip: "用弹力线迹或包缝，别拉扯布边。" }
+};
+
+const FIT_GUIDES = {
+  shoulder: { label: "肩线往后/往前跑", fix: "先确认肩斜，再调整前后肩线长度；不要只改袖窿。" },
+  bust: { label: "胸口横纹或吊住", fix: "增加胸围放松量，检查省道指向和胸高点位置。" },
+  waist: { label: "腰线不水平", fix: "穿在人台或真人身上画水平线，先改侧缝平衡再收省。" },
+  hip: { label: "臀部横纹", fix: "增加臀围或后片长度，检查后中线是否被拉开。" },
+  sleeve: { label: "袖山起皱/抬手紧", fix: "重新分配袖山吃势，必要时降低袖山或加宽袖肥。" },
+  hem: { label: "下摆前后不齐", fix: "穿鞋静置后再量离地高度，斜裁和圆摆先吊挂。" }
+};
+
+const CONSTRUCTION_RISKS = {
+  dress: "先做省道和肩侧缝，再试穿；隐形拉链、里布、下摆不要太早封死。",
+  jacket: "口袋和粘衬先做样，领子和袖山决定完成度；里布返口最后处理。",
+  shirt: "门襟、领座、袖衩要先做小样；扣眼必须试穿确认后再锁。",
+  skirt: "腰臀试穿后再装腰头；拉链、里布、下摆按顺序做会少拆很多。",
+  trousers: "先确认前后浪和口袋，再合侧缝；腰头和裤脚留到试穿后。",
+  coat: "厚料先削薄和试熨；袋位、领驳、垫肩和里布顺序不能乱。"
+};
+
+const TOOL_DEFINITIONS = [
+  { id: "sprint", category: "plan", title: "截止倒排", icon: "calendar-clock", note: "按剩余天数自动拆成每日制作时长。" },
+  { id: "budget", category: "plan", title: "作业预算", icon: "wallet", note: "主料、里布、辅料快速算总成本。" },
+  { id: "draft", category: "pattern", title: "原型公式", icon: "drafting-compass", note: "胸腰臀四分量和放松量速算。" },
+  { id: "scale", category: "pattern", title: "缩比换算", icon: "ruler", note: "1:4、1:5 小样纸样尺寸换算。" },
+  { id: "pieceInventory", category: "pattern", title: "纸样件数", icon: "files", note: "检查纸样、里布、贴边、粘衬是否漏件。" },
+  { id: "seamPreset", category: "craft", title: "缝份预设", icon: "move-horizontal", note: "按面料类型给缝份和下摆建议。" },
+  { id: "fitFix", category: "craft", title: "试穿诊断", icon: "user-round-search", note: "把试穿问题转成修改动作。" },
+  { id: "feedback", category: "plan", title: "讲评反馈", icon: "messages-square", note: "老师意见直接变成修改任务。" },
+  { id: "shotList", category: "show", title: "作品拍摄", icon: "camera", note: "作品集必拍角度清单。" },
+  { id: "presentation", category: "show", title: "汇报节奏", icon: "timer", note: "讲评时间和页数自动分配。" },
+  { id: "sampleMatrix", category: "craft", title: "小样矩阵", icon: "grid-2x2-check", note: "记录缩水、熨烫、线迹等实验完成度。" },
+  { id: "palette", category: "show", title: "色卡板", icon: "palette", note: "管理作品集和面料搭配色。" },
+  { id: "patternLabel", category: "pattern", title: "纸样标签", icon: "tag", note: "生成可抄到纸样上的标注。" },
+  { id: "orderRisk", category: "craft", title: "工序避坑", icon: "route", note: "按品类提示容易做错的顺序。" },
+  { id: "fabricBehavior", category: "craft", title: "面料性格", icon: "activity", note: "用垂坠、弹力、透度判断工艺风险。" }
+];
+
 const MATERIAL_PRESETS = [
   { name: "主面料", amount: "2.0 m", status: "待买" },
   { name: "里布", amount: "1.5 m", status: "待确认" },
@@ -591,6 +654,9 @@ const els = {
   swatchAfterInput: $("#swatchAfterInput"),
   swatchNoteInput: $("#swatchNoteInput"),
   swatchResult: $("#swatchResult"),
+  toolkitSummary: $("#toolkitSummary"),
+  toolFilterBar: $("#toolFilterBar"),
+  toolkitGrid: $("#toolkitGrid"),
   importInput: $("#importInput"),
   installButton: $("#installButton"),
   toast: $("#toast")
@@ -622,6 +688,43 @@ function defaultRubric() {
   return Object.fromEntries(RUBRIC_ITEMS.map((item) => [item.id, 3]));
 }
 
+function defaultToolbox() {
+  return {
+    filter: "all",
+    complete: {},
+    sprintDays: 10,
+    hoursPerDay: 2,
+    fabricMeters: 2,
+    fabricPrice: 45,
+    liningMeters: 1.5,
+    liningPrice: 18,
+    notionsCost: 35,
+    draftBust: 84,
+    draftWaist: 66,
+    draftHip: 90,
+    draftEase: 4,
+    scaleReal: 24,
+    scaleRatio: 5,
+    pieces: Object.fromEntries(PATTERN_PIECES.map((item, index) => [item, index < 4])),
+    seamPreset: "woven",
+    fitIssue: "shoulder",
+    feedbackText: "",
+    feedbackItems: [],
+    shots: Object.fromEntries(PHOTO_SHOTS.map((item, index) => [item, index < 2])),
+    presentationMinutes: 5,
+    presentationSlides: 6,
+    sampleTests: Object.fromEntries(SAMPLE_TESTS.map((item, index) => [item, index < 2])),
+    labelPiece: "前片",
+    labelSize: "M",
+    labelCut: 2,
+    labelFabric: "主面料",
+    drape: 3,
+    stretch: 2,
+    transparency: 2,
+    weight: 3
+  };
+}
+
 function defaultSchool() {
   return {
     course: "服装结构与工艺 II",
@@ -637,7 +740,8 @@ function defaultSchool() {
     defectGuide: "puckering",
     swatchBefore: 10,
     swatchAfter: 9.8,
-    swatchNote: "经向、纬向各测一次；记录熨烫温度和手感变化。"
+    swatchNote: "经向、纬向各测一次；记录熨烫温度和手感变化。",
+    toolbox: defaultToolbox()
   };
 }
 
@@ -711,7 +815,18 @@ function loadState() {
         ...(parsed.school || {}),
         deliverables: { ...base.school.deliverables, ...(parsed.school?.deliverables || {}) },
         rubric: { ...base.school.rubric, ...(parsed.school?.rubric || {}) },
-        palette: Array.isArray(parsed.school?.palette) ? parsed.school.palette : base.school.palette
+        palette: Array.isArray(parsed.school?.palette) ? parsed.school.palette : base.school.palette,
+        toolbox: {
+          ...base.school.toolbox,
+          ...(parsed.school?.toolbox || {}),
+          complete: { ...base.school.toolbox.complete, ...(parsed.school?.toolbox?.complete || {}) },
+          pieces: { ...base.school.toolbox.pieces, ...(parsed.school?.toolbox?.pieces || {}) },
+          shots: { ...base.school.toolbox.shots, ...(parsed.school?.toolbox?.shots || {}) },
+          sampleTests: { ...base.school.toolbox.sampleTests, ...(parsed.school?.toolbox?.sampleTests || {}) },
+          feedbackItems: Array.isArray(parsed.school?.toolbox?.feedbackItems)
+            ? parsed.school.toolbox.feedbackItems
+            : base.school.toolbox.feedbackItems
+        }
       },
       issues: Array.isArray(parsed.issues) ? parsed.issues : base.issues,
       customChecks: Array.isArray(parsed.customChecks) ? parsed.customChecks : base.customChecks
@@ -1327,6 +1442,252 @@ function renderSchool() {
     <span>${shrink >= 0 ? "缩水率" : "拉伸率"}参考值。裁剪前可以把关键部位预留到纸样或工艺单里。</span>
     <span>${escapeHtml(school.swatchNote || "记录面料手感、厚薄、熨烫温度和是否起皱。")}</span>
   `;
+
+  renderStudentToolkit();
+}
+
+function toolboxProgress() {
+  const complete = TOOL_DEFINITIONS.filter((tool) => state.school.toolbox.complete?.[tool.id]).length;
+  return { complete, total: TOOL_DEFINITIONS.length };
+}
+
+function renderToolResult(title, lines) {
+  return `
+    <div class="tool-result">
+      <strong>${escapeHtml(title)}</strong>
+      ${lines.map((line) => `<span>${escapeHtml(line)}</span>`).join("")}
+    </div>
+  `;
+}
+
+function renderCheckCluster(group, items) {
+  return `
+    <div class="tool-check-cluster">
+      ${items
+        .map((item) => {
+          const checked = Boolean(state.school.toolbox[group]?.[item]);
+          return `
+            <label class="${checked ? "checked" : ""}">
+              <input type="checkbox" data-tool-check-group="${group}" data-tool-key="${escapeHtml(item)}" ${checked ? "checked" : ""} />
+              <span>${escapeHtml(item)}</span>
+            </label>
+          `;
+        })
+        .join("")}
+    </div>
+  `;
+}
+
+function fabricBehaviorText() {
+  const box = state.school.toolbox;
+  const risk = Number(box.drape) + Number(box.stretch) + Number(box.transparency) + Number(box.weight);
+  if (risk >= 15) return "高风险面料：先做半身小样，缝份、压脚、熨烫都要单独测试。";
+  if (risk >= 10) return "中等风险：先做关键结构小样，尤其是领口、拉链和下摆。";
+  return "基础风险：可以按常规流程做，但仍建议保留小样记录。";
+}
+
+function renderToolCard(tool) {
+  const box = state.school.toolbox;
+  const done = Boolean(box.complete?.[tool.id]);
+  let body = "";
+
+  if (tool.id === "sprint") {
+    const days = Math.max(1, Number(box.sprintDays) || 1);
+    const hours = Math.max(0, Number(box.hoursPerDay) || 0);
+    const remainingSteps = state.steps.filter((step) => step.status !== "done").length || 1;
+    body = `
+      <div class="mini-form two">
+        <label>剩余天数<input type="number" min="1" step="1" value="${box.sprintDays}" data-tool-field="sprintDays" /></label>
+        <label>每天小时<input type="number" min="0" step="0.5" value="${box.hoursPerDay}" data-tool-field="hoursPerDay" /></label>
+      </div>
+      ${renderToolResult(`${(days * hours).toFixed(1)} 小时`, [`约 ${((days * hours) / remainingSteps).toFixed(1)} 小时/未完成工序`, "适合安排裁剪、假缝、试穿、整烫四个时间块。"])}
+    `;
+  }
+
+  if (tool.id === "budget") {
+    const total =
+      (Number(box.fabricMeters) || 0) * (Number(box.fabricPrice) || 0) +
+      (Number(box.liningMeters) || 0) * (Number(box.liningPrice) || 0) +
+      (Number(box.notionsCost) || 0);
+    body = `
+      <div class="mini-form three">
+        <label>主料 m<input type="number" min="0" step="0.1" value="${box.fabricMeters}" data-tool-field="fabricMeters" /></label>
+        <label>主料 ¥/m<input type="number" min="0" step="1" value="${box.fabricPrice}" data-tool-field="fabricPrice" /></label>
+        <label>辅料 ¥<input type="number" min="0" step="1" value="${box.notionsCost}" data-tool-field="notionsCost" /></label>
+        <label>里布 m<input type="number" min="0" step="0.1" value="${box.liningMeters}" data-tool-field="liningMeters" /></label>
+        <label>里布 ¥/m<input type="number" min="0" step="1" value="${box.liningPrice}" data-tool-field="liningPrice" /></label>
+      </div>
+      ${renderToolResult(`¥${total.toFixed(0)}`, ["课堂作业可另加 10% 试错预算。"])}
+    `;
+  }
+
+  if (tool.id === "draft") {
+    const bust = (Number(box.draftBust) + Number(box.draftEase)) / 4;
+    const waist = (Number(box.draftWaist) + Number(box.draftEase)) / 4;
+    const hip = (Number(box.draftHip) + Number(box.draftEase)) / 4;
+    body = `
+      <div class="mini-form four">
+        <label>胸围<input type="number" step="0.1" value="${box.draftBust}" data-tool-field="draftBust" /></label>
+        <label>腰围<input type="number" step="0.1" value="${box.draftWaist}" data-tool-field="draftWaist" /></label>
+        <label>臀围<input type="number" step="0.1" value="${box.draftHip}" data-tool-field="draftHip" /></label>
+        <label>松量<input type="number" step="0.1" value="${box.draftEase}" data-tool-field="draftEase" /></label>
+      </div>
+      ${renderToolResult("四分量", [`胸 ${bust.toFixed(1)} cm`, `腰 ${waist.toFixed(1)} cm`, `臀 ${hip.toFixed(1)} cm`])}
+    `;
+  }
+
+  if (tool.id === "scale") {
+    const scaled = (Number(box.scaleReal) || 0) / (Number(box.scaleRatio) || 1);
+    body = `
+      <div class="mini-form two">
+        <label>实际 cm<input type="number" step="0.1" value="${box.scaleReal}" data-tool-field="scaleReal" /></label>
+        <label>比例 1:<input type="number" min="1" step="1" value="${box.scaleRatio}" data-tool-field="scaleRatio" /></label>
+      </div>
+      ${renderToolResult(`${scaled.toFixed(2)} cm`, ["适合做 1:5 小样、缩比例款式图和纸样练习。"])}
+    `;
+  }
+
+  if (tool.id === "pieceInventory") {
+    const checked = PATTERN_PIECES.filter((item) => box.pieces?.[item]).length;
+    body = `${renderCheckCluster("pieces", PATTERN_PIECES)}${renderToolResult(`${checked}/${PATTERN_PIECES.length}`, ["漏贴边、漏粘衬、漏里布是课堂样衣最常见返工点。"])}`;
+  }
+
+  if (tool.id === "seamPreset") {
+    const preset = SEAM_PRESETS[box.seamPreset] || SEAM_PRESETS.woven;
+    body = `
+      <label class="tool-select">面料/结构<select data-tool-field="seamPreset">
+        ${Object.entries(SEAM_PRESETS).map(([id, item]) => `<option value="${id}" ${box.seamPreset === id ? "selected" : ""}>${item.label}</option>`).join("")}
+      </select></label>
+      ${renderToolResult(preset.label, [`侧缝 ${preset.side}`, `拉链 ${preset.zipper}`, `下摆 ${preset.hem}`, preset.tip])}
+    `;
+  }
+
+  if (tool.id === "fitFix") {
+    const guide = FIT_GUIDES[box.fitIssue] || FIT_GUIDES.shoulder;
+    body = `
+      <label class="tool-select">试穿问题<select data-tool-field="fitIssue">
+        ${Object.entries(FIT_GUIDES).map(([id, item]) => `<option value="${id}" ${box.fitIssue === id ? "selected" : ""}>${item.label}</option>`).join("")}
+      </select></label>
+      ${renderToolResult(guide.label, [guide.fix])}
+    `;
+  }
+
+  if (tool.id === "feedback") {
+    body = `
+      <div class="feedback-entry">
+        <input type="text" value="${escapeHtml(box.feedbackText || "")}" data-tool-field="feedbackText" placeholder="老师说：腰线偏低，口袋比例再小一点" />
+        <button class="icon-button mini-icon" type="button" data-feedback-add title="加入任务">${icon("plus")}</button>
+      </div>
+      <div class="compact-list">
+        ${(box.feedbackItems || []).map((item) => `
+          <label class="${item.done ? "checked" : ""}">
+            <input type="checkbox" data-feedback-toggle="${item.id}" ${item.done ? "checked" : ""} />
+            <span>${escapeHtml(item.text)}</span>
+            <button class="icon-button mini-icon" type="button" data-feedback-remove="${item.id}" title="删除">${icon("x")}</button>
+          </label>
+        `).join("") || `<span class="muted-chip">暂无讲评任务</span>`}
+      </div>
+    `;
+  }
+
+  if (tool.id === "shotList") {
+    const checked = PHOTO_SHOTS.filter((item) => box.shots?.[item]).length;
+    body = `${renderCheckCluster("shots", PHOTO_SHOTS)}${renderToolResult(`${checked}/${PHOTO_SHOTS.length}`, ["拍摄完这些角度，作品集页基本够用了。"])}`;
+  }
+
+  if (tool.id === "presentation") {
+    const seconds = ((Number(box.presentationMinutes) || 0) * 60) / Math.max(1, Number(box.presentationSlides) || 1);
+    body = `
+      <div class="mini-form two">
+        <label>分钟<input type="number" min="1" step="1" value="${box.presentationMinutes}" data-tool-field="presentationMinutes" /></label>
+        <label>页数<input type="number" min="1" step="1" value="${box.presentationSlides}" data-tool-field="presentationSlides" /></label>
+      </div>
+      ${renderToolResult(`${seconds.toFixed(0)} 秒/页`, ["顺序建议：概念、色彩、款式图、纸样、工艺、成衣。"])}
+    `;
+  }
+
+  if (tool.id === "sampleMatrix") {
+    const checked = SAMPLE_TESTS.filter((item) => box.sampleTests?.[item]).length;
+    body = `${renderCheckCluster("sampleTests", SAMPLE_TESTS)}${renderToolResult(`${checked}/${SAMPLE_TESTS.length}`, ["小样照片可以直接放进过程册。"])}`;
+  }
+
+  if (tool.id === "palette") {
+    body = `
+      <div class="palette-editor">
+        ${(state.school.palette || []).map((color, index) => `
+          <label><input type="color" value="${escapeHtml(color)}" data-palette-index="${index}" /><span>${escapeHtml(color)}</span></label>
+        `).join("")}
+      </div>
+      ${renderToolResult("色彩叙事", ["主色、辅色、强调色和中性色保持 4 色以内，作品集更干净。"])}
+    `;
+  }
+
+  if (tool.id === "patternLabel") {
+    const label = `${state.project.name || "作品"} / ${box.labelPiece} / ${box.labelSize} / ${box.labelFabric} / 裁 ${box.labelCut} 片 / ${new Date().toLocaleDateString("zh-CN")}`;
+    body = `
+      <div class="mini-form four">
+        <label>部件<input type="text" value="${escapeHtml(box.labelPiece)}" data-tool-field="labelPiece" /></label>
+        <label>尺码<input type="text" value="${escapeHtml(box.labelSize)}" data-tool-field="labelSize" /></label>
+        <label>裁片<input type="number" min="1" step="1" value="${box.labelCut}" data-tool-field="labelCut" /></label>
+        <label>材料<input type="text" value="${escapeHtml(box.labelFabric)}" data-tool-field="labelFabric" /></label>
+      </div>
+      ${renderToolResult("纸样标签", [label])}
+    `;
+  }
+
+  if (tool.id === "orderRisk") {
+    const text = CONSTRUCTION_RISKS[state.project.type] || CONSTRUCTION_RISKS.dress;
+    body = renderToolResult(GARMENT_TYPES[state.project.type]?.label || "当前品类", [text]);
+  }
+
+  if (tool.id === "fabricBehavior") {
+    body = `
+      <div class="slider-stack">
+        ${[
+          ["drape", "垂坠"],
+          ["stretch", "弹力"],
+          ["transparency", "透度"],
+          ["weight", "厚重"]
+        ].map(([field, label]) => `
+          <label><span>${label}</span><input type="range" min="1" max="5" step="1" value="${box[field]}" data-tool-field="${field}" /><b>${box[field]}</b></label>
+        `).join("")}
+      </div>
+      ${renderToolResult("工艺风险", [fabricBehaviorText()])}
+    `;
+  }
+
+  return `
+    <article class="tool-card ${done ? "done" : ""}" data-tool-card="${tool.id}">
+      <div class="tool-card-head">
+        <span class="tool-icon">${icon(tool.icon)}</span>
+        <div>
+          <h3>${escapeHtml(tool.title)}</h3>
+          <p>${escapeHtml(tool.note)}</p>
+        </div>
+        <label class="done-toggle" title="标记处理完">
+          <input type="checkbox" data-tool-complete="${tool.id}" ${done ? "checked" : ""} />
+          <span></span>
+        </label>
+      </div>
+      ${body}
+    </article>
+  `;
+}
+
+function renderStudentToolkit() {
+  const toolbox = state.school.toolbox;
+  const progress = toolboxProgress();
+  els.toolkitSummary.textContent = `${progress.complete}/${progress.total} 已处理`;
+  els.toolFilterBar.innerHTML = TOOL_FILTERS.map(
+    (filter) => `
+      <button class="filter-pill ${toolbox.filter === filter.id ? "active" : ""}" type="button" data-tool-filter="${filter.id}">
+        ${filter.label}
+      </button>
+    `
+  ).join("");
+
+  const tools = TOOL_DEFINITIONS.filter((tool) => toolbox.filter === "all" || tool.category === toolbox.filter);
+  els.toolkitGrid.innerHTML = tools.map(renderToolCard).join("");
 }
 
 function renderStudioTabs() {
@@ -1396,6 +1757,55 @@ function updateSchoolTools() {
   renderAll();
 }
 
+function normalizeToolValue(target) {
+  if (target.type === "number" || target.type === "range") return Number(target.value);
+  if (target.type === "checkbox") return target.checked;
+  return target.value;
+}
+
+function updateToolkitFromEvent(event) {
+  const target = event.target;
+  const box = state.school.toolbox;
+
+  if (target.matches("[data-tool-field]")) {
+    box[target.dataset.toolField] = normalizeToolValue(target);
+    saveState();
+    if (event.type === "change" || target.type === "range" || target.tagName === "SELECT") renderAll();
+    return;
+  }
+
+  if (target.matches("[data-tool-complete]")) {
+    box.complete[target.dataset.toolComplete] = target.checked;
+    saveState();
+    renderAll();
+    return;
+  }
+
+  if (target.matches("[data-tool-check-group]")) {
+    const group = target.dataset.toolCheckGroup;
+    box[group] = box[group] || {};
+    box[group][target.dataset.toolKey] = target.checked;
+    saveState();
+    renderAll();
+    return;
+  }
+
+  if (target.matches("[data-feedback-toggle]")) {
+    const item = box.feedbackItems.find((entry) => entry.id === target.dataset.feedbackToggle);
+    if (item) item.done = target.checked;
+    saveState();
+    renderAll();
+    return;
+  }
+
+  if (target.matches("[data-palette-index]")) {
+    const index = Number(target.dataset.paletteIndex);
+    state.school.palette[index] = target.value;
+    saveState();
+    renderAll();
+  }
+}
+
 function switchView(view, filter) {
   state.activeView = view;
   if (filter) state.activeFilter = filter;
@@ -1423,9 +1833,45 @@ function updateRoute() {
 
 function setupEvents() {
   document.addEventListener("click", (event) => {
+    const scrollTarget = event.target.closest("[data-scroll-target]");
+    if (scrollTarget) {
+      document.getElementById(scrollTarget.dataset.scrollTarget)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
     const viewTarget = event.target.closest("[data-view-target]");
     if (viewTarget) {
       switchView(viewTarget.dataset.viewTarget, viewTarget.dataset.filter);
+      return;
+    }
+
+    const toolFilter = event.target.closest("[data-tool-filter]");
+    if (toolFilter) {
+      state.school.toolbox.filter = toolFilter.dataset.toolFilter;
+      saveState();
+      renderAll();
+      return;
+    }
+
+    const addFeedback = event.target.closest("[data-feedback-add]");
+    if (addFeedback) {
+      const text = (state.school.toolbox.feedbackText || "").trim();
+      if (!text) return toast("先写一条讲评反馈");
+      state.school.toolbox.feedbackItems.unshift({ id: `fb-${Date.now()}`, text, done: false });
+      state.school.toolbox.feedbackText = "";
+      saveState();
+      renderAll();
+      toast("反馈已加入任务");
+      return;
+    }
+
+    const removeFeedback = event.target.closest("[data-feedback-remove]");
+    if (removeFeedback) {
+      state.school.toolbox.feedbackItems = state.school.toolbox.feedbackItems.filter(
+        (item) => item.id !== removeFeedback.dataset.feedbackRemove
+      );
+      saveState();
+      renderAll();
       return;
     }
 
@@ -1512,6 +1958,8 @@ function setupEvents() {
 
   els.schoolForm.addEventListener("input", updateSchoolFromForm);
   els.schoolForm.addEventListener("change", updateSchoolFromForm);
+  els.toolkitGrid.addEventListener("input", updateToolkitFromEvent);
+  els.toolkitGrid.addEventListener("change", updateToolkitFromEvent);
 
   els.deliverableList.addEventListener("change", (event) => {
     if (!event.target.matches("[data-deliverable]")) return;

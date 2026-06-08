@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="衣作" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <title>衣作防错台</title>
+    <title>衣作 Studio</title>
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="icon" href="icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="icon.svg" />
@@ -18,11 +18,11 @@
   <body>
     <div class="app-shell">
       <header class="topbar">
-        <a class="brand" href="/" aria-label="衣作防错台">
+        <a class="brand" href="/" aria-label="衣作 Studio">
           <span class="brand-mark">衣</span>
           <span class="brand-copy">
-            <strong>衣作防错台</strong>
-            <small>Atelier Companion</small>
+            <strong>衣作 Studio</strong>
+            <small>Student Atelier</small>
           </span>
         </a>
 
@@ -30,6 +30,10 @@
           <button class="view-tab" type="button" data-view-target="dashboard">
             <i data-lucide="layout-dashboard"></i>
             <span>总览</span>
+          </button>
+          <button class="view-tab" type="button" data-view-target="school">
+            <i data-lucide="book-open-check"></i>
+            <span>课业</span>
           </button>
           <button class="view-tab" type="button" data-view-target="checks">
             <i data-lucide="shield-check"></i>
@@ -114,16 +118,33 @@
               </div>
             </article>
 
-            <aside class="visual-workbench">
-              <img src="assets/fashion-template.png" alt="正背面服装设计人体模板" />
+            <aside class="visual-workbench student-dashboard">
+              <div class="atelier-board">
+                <div class="board-panel main">
+                  <p class="eyebrow">今日焦点</p>
+                  <h2 id="focusTitle">作业交付巡检</h2>
+                  <div class="board-lines" aria-hidden="true">
+                    <span></span><span></span><span></span>
+                  </div>
+                </div>
+                <div class="swatch-board" id="homePalette"></div>
+                <div class="board-panel">
+                  <span>课业包</span>
+                  <strong id="homeDeliverableProgress">0/0</strong>
+                </div>
+                <div class="board-panel">
+                  <span>工艺建议</span>
+                  <strong id="homeMachineTip">棉布 · 80/12</strong>
+                </div>
+              </div>
               <div class="visual-overlay">
                 <div>
-                  <p class="eyebrow">今日焦点</p>
-                  <h2 id="focusTitle">缝前巡检</h2>
+                  <p class="eyebrow">学生工作台</p>
+                  <h2 id="studentBoardTitle">作业、工艺、试穿一起管</h2>
                 </div>
-                <button class="text-button primary" type="button" data-view-target="checks">
+                <button class="text-button primary" type="button" data-view-target="school">
                   <i data-lucide="arrow-right"></i>
-                  进入防错
+                  进入课业
                 </button>
               </div>
             </aside>
@@ -166,6 +187,144 @@
                 </button>
               </div>
               <div class="step-preview" id="stepPreview"></div>
+            </article>
+          </section>
+        </section>
+
+        <section class="workspace-view" id="schoolView" data-view="school">
+          <section class="tool-head">
+            <div>
+              <p class="eyebrow">大二课业</p>
+              <h1>作业包、评分点、工艺速查和作品集文案</h1>
+            </div>
+            <div class="head-actions">
+              <button class="text-button" id="copyPortfolioButton" type="button">
+                <i data-lucide="copy"></i>
+                复制文案
+              </button>
+              <button class="text-button primary" type="button" data-view-target="flow">
+                <i data-lucide="list-checks"></i>
+                排工序
+              </button>
+            </div>
+          </section>
+
+          <section class="school-grid">
+            <article class="panel assignment-panel">
+              <div class="panel-heading compact">
+                <div>
+                  <p class="eyebrow">作业 brief</p>
+                  <h2>课程要求</h2>
+                </div>
+                <strong class="large-number" id="schoolProgressNumber">0%</strong>
+              </div>
+              <form class="school-form" id="schoolForm">
+                <label>
+                  课程
+                  <input id="courseInput" type="text" autocomplete="off" />
+                </label>
+                <label>
+                  老师/组别
+                  <input id="teacherInput" type="text" autocomplete="off" />
+                </label>
+                <label class="wide">
+                  作业题目
+                  <input id="assignmentInput" type="text" autocomplete="off" />
+                </label>
+                <label>
+                  主题关键词
+                  <input id="keywordsInput" type="text" autocomplete="off" />
+                </label>
+                <label>
+                  展示形式
+                  <select id="presentationSelect">
+                    <option value="portfolio">作品集页</option>
+                    <option value="critique">课堂讲评</option>
+                    <option value="lookbook">成衣拍摄</option>
+                    <option value="process">过程册</option>
+                  </select>
+                </label>
+                <label class="wide">
+                  设计说明
+                  <textarea id="conceptInput" rows="4"></textarea>
+                </label>
+              </form>
+              <div class="deliverable-section">
+                <div class="mini-heading">
+                  <span>交付清单</span>
+                  <button class="ghost-button" id="resetDeliverablesButton" type="button">重置</button>
+                </div>
+                <div class="deliverable-list" id="deliverableList"></div>
+              </div>
+            </article>
+
+            <aside class="panel rubric-panel">
+              <div class="panel-heading compact">
+                <div>
+                  <p class="eyebrow">评分点</p>
+                  <h2>自评分</h2>
+                </div>
+                <span class="phase-pill" id="rubricAverage">0/5</span>
+              </div>
+              <div class="rubric-list" id="rubricList"></div>
+              <div class="portfolio-copy" id="portfolioCopy"></div>
+            </aside>
+          </section>
+
+          <section class="school-tools-grid">
+            <article class="panel">
+              <div class="panel-heading compact">
+                <div>
+                  <p class="eyebrow">工艺速查</p>
+                  <h2>面料对应针线</h2>
+                </div>
+                <i class="heading-icon" data-lucide="settings-2"></i>
+              </div>
+              <label class="tool-select">
+                面料类型
+                <select id="fabricGuideSelect"></select>
+              </label>
+              <div class="guide-card" id="machineGuideResult"></div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-heading compact">
+                <div>
+                  <p class="eyebrow">翻车急救</p>
+                  <h2>常见问题处理</h2>
+                </div>
+                <i class="heading-icon" data-lucide="wrench"></i>
+              </div>
+              <label class="tool-select">
+                问题
+                <select id="defectGuideSelect"></select>
+              </label>
+              <div class="guide-card" id="defectGuideResult"></div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-heading compact">
+                <div>
+                  <p class="eyebrow">面料实验</p>
+                  <h2>缩水与小样记录</h2>
+                </div>
+                <i class="heading-icon" data-lucide="flask-conical"></i>
+              </div>
+              <form class="swatch-form" id="swatchForm">
+                <label>
+                  洗前 cm
+                  <input id="swatchBeforeInput" type="number" min="0" step="0.1" />
+                </label>
+                <label>
+                  洗后 cm
+                  <input id="swatchAfterInput" type="number" min="0" step="0.1" />
+                </label>
+                <label class="wide">
+                  小样备注
+                  <input id="swatchNoteInput" type="text" autocomplete="off" />
+                </label>
+              </form>
+              <div class="guide-card" id="swatchResult"></div>
             </article>
           </section>
         </section>

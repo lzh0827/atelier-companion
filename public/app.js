@@ -77,6 +77,109 @@ const SEAM_AREAS = [
   { id: "lining", label: "里布", defaultSeam: 1 }
 ];
 
+const DELIVERABLES = [
+  { id: "brief", label: "作业要求整理", note: "题目、老师要求、截止日、评分点" },
+  { id: "moodboard", label: "灵感板/色彩板", note: "关键词、色卡、廓形参考" },
+  { id: "sketch", label: "款式图与结构说明", note: "正背面、局部结构、设计逻辑" },
+  { id: "pattern", label: "纸样与放码记录", note: "纸样编号、布纹、缝份和刀眼" },
+  { id: "swatch", label: "面料小样实验", note: "缩水、熨烫、针距、厚薄和垂坠" },
+  { id: "processPhotos", label: "过程照片", note: "裁剪、假缝、试穿、修改、成衣" },
+  { id: "techSheet", label: "工艺单/BOM", note: "面辅料、用量、机器设置、成本" },
+  { id: "finalPhotos", label: "成衣照片与复盘", note: "正侧背、细节、问题和修改结论" }
+];
+
+const RUBRIC_ITEMS = [
+  { id: "concept", label: "概念完整度" },
+  { id: "silhouette", label: "廓形与比例" },
+  { id: "pattern", label: "版型准确度" },
+  { id: "craft", label: "工艺完成度" },
+  { id: "presentation", label: "展示表达" }
+];
+
+const FABRIC_GUIDES = {
+  cotton: {
+    label: "棉/府绸",
+    needle: "80/12 通用针",
+    stitch: "2.5-3.0 mm",
+    tension: "中等张力，先试线迹",
+    foot: "普通压脚或直线压脚",
+    pressing: "可蒸汽熨，先试缩水"
+  },
+  chiffon: {
+    label: "雪纺/薄纱",
+    needle: "60/8 或 70/10 细针",
+    stitch: "1.8-2.2 mm",
+    tension: "低张力，垫纸防卷边",
+    foot: "细料压脚或卷边压脚",
+    pressing: "低温隔布，少蒸汽"
+  },
+  denim: {
+    label: "牛仔/厚棉",
+    needle: "90/14 或 100/16 牛仔针",
+    stitch: "3.0-3.5 mm",
+    tension: "略高张力，厚位慢车",
+    foot: "滚轮压脚或补偿垫",
+    pressing: "高温蒸汽，厚缝份先削薄"
+  },
+  wool: {
+    label: "毛呢/粗纺",
+    needle: "80/12 或 90/14",
+    stitch: "2.8-3.2 mm",
+    tension: "中等，先试压痕",
+    foot: "普通压脚，厚料可用滚轮",
+    pressing: "烫布+蒸汽，避免极光"
+  },
+  knit: {
+    label: "针织/弹力",
+    needle: "75/11 圆头针",
+    stitch: "弹力线迹或窄三步曲折",
+    tension: "略低，避免拉伸变形",
+    foot: "上送料或特氟龙压脚",
+    pressing: "低温轻压，不拉扯"
+  },
+  satin: {
+    label: "缎面/醋酸",
+    needle: "70/10 微尖针",
+    stitch: "2.0-2.5 mm",
+    tension: "低到中，使用细线",
+    foot: "特氟龙压脚",
+    pressing: "反面低温隔布，避免水印"
+  }
+};
+
+const DEFECT_GUIDES = {
+  puckering: {
+    label: "缝线起皱",
+    cause: "针距过短、张力过高、面料太薄或没稳定",
+    fix: "降低张力，放长针距，垫薄纸或先疏缝，熨烫时只压不推"
+  },
+  skipped: {
+    label: "跳针",
+    cause: "针钝、针型不对、机针没装到底或面料弹性大",
+    fix: "换新针，针织用圆头针，厚料用牛仔针，重新穿线并试车"
+  },
+  wavy: {
+    label: "边缘波浪",
+    cause: "车缝时拉扯面料、压脚压力偏大或弹力面料没稳定",
+    fix: "放松手、降低压脚压力，贴透明胶条/水溶衬后再车"
+  },
+  zipper: {
+    label: "拉链不顺",
+    cause: "两侧齿距不一致、里布卷入、下止位置没对齐",
+    fix: "拆到卡点前一段，重新画缝线，先疏缝试拉合再压线"
+  },
+  pocket: {
+    label: "口袋不对称",
+    cause: "定位线只凭目测、左右片没镜像核对",
+    fix: "用纸样或透明尺重新定三点：袋口高、袋角、侧缝距离"
+  },
+  fit: {
+    label: "试穿不平衡",
+    cause: "肩线、腰线或侧缝不水平，局部先改导致整体跑偏",
+    fix: "先拍正侧背，画水平线，再从肩颈点、胸腰臀线整体判断"
+  }
+};
+
 const MATERIAL_PRESETS = [
   { name: "主面料", amount: "2.0 m", status: "待买" },
   { name: "里布", amount: "1.5 m", status: "待确认" },
@@ -113,8 +216,8 @@ const CHECK_LIBRARY = [
   {
     id: "grainline",
     component: "cutting",
-    title: "布纹线和纸样布纹线平行",
-    detail: "先量纸样两端到布边的距离，再压住纸样落剪。",
+    title: "纸样方向和布边距离已复核",
+    detail: "先看经纬向、倒毛和图案方向，再压住纸样落剪。",
     severity: "high",
     applies: ["all"]
   },
@@ -428,6 +531,10 @@ const els = {
   projectMetrics: $("#projectMetrics"),
   priorityList: $("#priorityList"),
   stepPreview: $("#stepPreview"),
+  homePalette: $("#homePalette"),
+  homeDeliverableProgress: $("#homeDeliverableProgress"),
+  homeMachineTip: $("#homeMachineTip"),
+  studentBoardTitle: $("#studentBoardTitle"),
   componentFilters: $("#componentFilters"),
   checkGroups: $("#checkGroups"),
   checkSummaryTitle: $("#checkSummaryTitle"),
@@ -464,6 +571,26 @@ const els = {
   issuePhotoInput: $("#issuePhotoInput"),
   photoLabel: $("#photoLabel"),
   issueList: $("#issueList"),
+  schoolForm: $("#schoolForm"),
+  courseInput: $("#courseInput"),
+  teacherInput: $("#teacherInput"),
+  assignmentInput: $("#assignmentInput"),
+  keywordsInput: $("#keywordsInput"),
+  presentationSelect: $("#presentationSelect"),
+  conceptInput: $("#conceptInput"),
+  schoolProgressNumber: $("#schoolProgressNumber"),
+  deliverableList: $("#deliverableList"),
+  rubricAverage: $("#rubricAverage"),
+  rubricList: $("#rubricList"),
+  portfolioCopy: $("#portfolioCopy"),
+  fabricGuideSelect: $("#fabricGuideSelect"),
+  machineGuideResult: $("#machineGuideResult"),
+  defectGuideSelect: $("#defectGuideSelect"),
+  defectGuideResult: $("#defectGuideResult"),
+  swatchBeforeInput: $("#swatchBeforeInput"),
+  swatchAfterInput: $("#swatchAfterInput"),
+  swatchNoteInput: $("#swatchNoteInput"),
+  swatchResult: $("#swatchResult"),
   importInput: $("#importInput"),
   installButton: $("#installButton"),
   toast: $("#toast")
@@ -474,7 +601,7 @@ let pendingInstallEvent = null;
 let pendingIssuePhoto = null;
 let timerInterval = null;
 
-const VALID_VIEWS = new Set(["dashboard", "checks", "flow", "studio"]);
+const VALID_VIEWS = new Set(["dashboard", "school", "checks", "flow", "studio"]);
 const VALID_STUDIO_TABS = new Set(["measurements", "materials", "calculator", "issues"]);
 
 function clone(value) {
@@ -485,6 +612,33 @@ function emptyMeasurements() {
   return Object.fromEntries(
     MEASUREMENTS.map(([id, label, value, ease, note]) => [id, { label, value, ease, note }])
   );
+}
+
+function emptyDeliverables() {
+  return Object.fromEntries(DELIVERABLES.map((item) => [item.id, false]));
+}
+
+function defaultRubric() {
+  return Object.fromEntries(RUBRIC_ITEMS.map((item) => [item.id, 3]));
+}
+
+function defaultSchool() {
+  return {
+    course: "服装结构与工艺 II",
+    teacher: "",
+    assignment: "半裙/连衣裙样衣作业",
+    keywords: "校园通勤、结构线、实穿",
+    presentation: "portfolio",
+    concept: "记录灵感来源、廓形选择、面料实验和工艺难点。",
+    deliverables: emptyDeliverables(),
+    rubric: defaultRubric(),
+    palette: ["#101312", "#11665f", "#d7b98c", "#9d6042"],
+    fabricGuide: "cotton",
+    defectGuide: "puckering",
+    swatchBefore: 10,
+    swatchAfter: 9.8,
+    swatchNote: "经向、纬向各测一次；记录熨烫温度和手感变化。"
+  };
 }
 
 function templateSteps(type = "dress") {
@@ -516,6 +670,7 @@ function defaultState() {
     steps: templateSteps("dress"),
     measurements: emptyMeasurements(),
     materials: clone(MATERIAL_PRESETS),
+    school: defaultSchool(),
     dailyNote: "",
     timer: { seconds: 0, running: false, startedAt: null, laps: [] },
     calc: {
@@ -551,6 +706,13 @@ function loadState() {
       timer: { ...base.timer, ...(parsed.timer || {}) },
       steps: Array.isArray(parsed.steps) && parsed.steps.length ? parsed.steps : base.steps,
       materials: Array.isArray(parsed.materials) ? parsed.materials : base.materials,
+      school: {
+        ...base.school,
+        ...(parsed.school || {}),
+        deliverables: { ...base.school.deliverables, ...(parsed.school?.deliverables || {}) },
+        rubric: { ...base.school.rubric, ...(parsed.school?.rubric || {}) },
+        palette: Array.isArray(parsed.school?.palette) ? parsed.school.palette : base.school.palette
+      },
       issues: Array.isArray(parsed.issues) ? parsed.issues : base.issues,
       customChecks: Array.isArray(parsed.customChecks) ? parsed.customChecks : base.customChecks
     };
@@ -651,10 +813,31 @@ function stepProgress() {
   return { done, total, percent: Math.round((done / total) * 100) };
 }
 
+function deliverableProgress() {
+  const total = DELIVERABLES.length;
+  const done = DELIVERABLES.filter((item) => state.school.deliverables?.[item.id]).length;
+  return { done, total, percent: Math.round((done / total) * 100) };
+}
+
+function rubricAverageScore() {
+  const scores = RUBRIC_ITEMS.map((item) => Number(state.school.rubric?.[item.id] || 0));
+  const average = scores.reduce((sum, value) => sum + value, 0) / scores.length;
+  return Number.isFinite(average) ? average : 0;
+}
+
+function currentMachineGuide() {
+  return FABRIC_GUIDES[state.school.fabricGuide] || FABRIC_GUIDES.cotton;
+}
+
+function currentDefectGuide() {
+  return DEFECT_GUIDES[state.school.defectGuide] || DEFECT_GUIDES.puckering;
+}
+
 function projectProgress() {
   const check = checkProgress();
   const steps = stepProgress();
-  return Math.round(check.percent * 0.44 + steps.percent * 0.56);
+  const school = deliverableProgress();
+  return Math.round(check.percent * 0.34 + steps.percent * 0.44 + school.percent * 0.22);
 }
 
 function daysUntil(dateValue) {
@@ -675,6 +858,12 @@ function populateStaticControls() {
   ).join("");
   els.issueAreaSelect.innerHTML = COMPONENTS.map((item) => `<option value="${item.id}">${item.label}</option>`).join("");
   els.seamAreaSelect.innerHTML = SEAM_AREAS.map((item) => `<option value="${item.id}">${item.label}</option>`).join("");
+  els.fabricGuideSelect.innerHTML = Object.entries(FABRIC_GUIDES)
+    .map(([id, item]) => `<option value="${id}">${item.label}</option>`)
+    .join("");
+  els.defectGuideSelect.innerHTML = Object.entries(DEFECT_GUIDES)
+    .map(([id, item]) => `<option value="${id}">${item.label}</option>`)
+    .join("");
 }
 
 function renderProjectForm() {
@@ -704,17 +893,27 @@ function renderDashboard() {
   const progress = projectProgress();
   const check = checkProgress();
   const steps = stepProgress();
+  const school = deliverableProgress();
+  const guide = currentMachineGuide();
   const due = daysUntil(state.project.deadline);
   const dueLabel = due === null ? "未设定" : due < 0 ? `逾期 ${Math.abs(due)} 天` : due === 0 ? "今天" : `${due} 天`;
   const highPending = allChecks().filter((item) => item.severity === "high" && !state.checks[item.id]);
   const nextStep = state.steps.find((step) => step.status !== "done");
 
-  els.focusTitle.textContent = highPending[0]?.title || nextStep?.name || "整烫收尾";
+  els.focusTitle.textContent = highPending[0]?.title || nextStep?.name || "完善作业交付包";
+  els.studentBoardTitle.textContent = state.school.assignment || "作业、工艺、试穿一起管";
+  els.homeDeliverableProgress.textContent = `${school.done}/${school.total}`;
+  els.homeMachineTip.textContent = `${guide.label} · ${guide.needle}`;
+  els.homePalette.innerHTML = (state.school.palette || [])
+    .slice(0, 4)
+    .map((color) => `<div class="swatch-tile"><span style="background:${escapeHtml(color)}"></span></div>`)
+    .join("");
   els.progressNumber.textContent = `${progress}%`;
   els.progressBar.style.width = `${progress}%`;
   els.projectMetrics.innerHTML = [
     ["防错", `${check.done}/${check.total}`],
     ["工序", `${steps.done}/${steps.total}`],
+    ["课业", `${school.done}/${school.total}`],
     ["截止", dueLabel]
   ]
     .map(
@@ -1044,6 +1243,92 @@ function renderIssues() {
     : `<div class="empty-state">还没有问题记录</div>`;
 }
 
+function portfolioText() {
+  const project = state.project.name || "未命名作品";
+  const assignment = state.school.assignment || "课程作业";
+  const type = GARMENT_TYPES[state.project.type]?.label || state.project.type;
+  const keywords = state.school.keywords || "结构、比例、工艺";
+  const concept = state.school.concept || state.project.brief || "围绕课程要求完成从设计到成衣的制作过程。";
+  const guide = currentMachineGuide();
+
+  return `《${project}》是${state.school.course || "服装设计课程"}中的${assignment}。作品以${keywords}为关键词，选择${type}作为载体，重点记录廓形比例、纸样调整、面料小样和工艺控制。制作中使用${guide.label}工艺测试，机针/针距参考为${guide.needle}、${guide.stitch}。${concept}`;
+}
+
+function renderSchool() {
+  const school = state.school;
+  const progress = deliverableProgress();
+  const average = rubricAverageScore();
+  const machine = currentMachineGuide();
+  const defect = currentDefectGuide();
+  const before = Number(school.swatchBefore) || 0;
+  const after = Number(school.swatchAfter) || 0;
+  const shrink = before > 0 ? ((before - after) / before) * 100 : 0;
+
+  els.courseInput.value = school.course || "";
+  els.teacherInput.value = school.teacher || "";
+  els.assignmentInput.value = school.assignment || "";
+  els.keywordsInput.value = school.keywords || "";
+  els.presentationSelect.value = school.presentation || "portfolio";
+  els.conceptInput.value = school.concept || "";
+  els.schoolProgressNumber.textContent = `${progress.percent}%`;
+  els.rubricAverage.textContent = `${average.toFixed(1)}/5`;
+
+  els.deliverableList.innerHTML = DELIVERABLES.map((item) => {
+    const checked = Boolean(school.deliverables?.[item.id]);
+    return `
+      <label class="deliverable-row ${checked ? "checked" : ""}">
+        <input type="checkbox" data-deliverable="${item.id}" ${checked ? "checked" : ""} />
+        <span>
+          <span class="row-title">${escapeHtml(item.label)}</span>
+          <span class="row-sub">${escapeHtml(item.note)}</span>
+        </span>
+        <span class="status-pill ${checked ? "status-done" : "status-todo"}">${checked ? "完成" : "待做"}</span>
+      </label>
+    `;
+  }).join("");
+
+  els.rubricList.innerHTML = RUBRIC_ITEMS.map((item) => {
+    const score = Number(school.rubric?.[item.id] || 0);
+    return `
+      <label class="rubric-row">
+        <span class="row-title">${escapeHtml(item.label)}</span>
+        <input type="range" min="1" max="5" step="1" value="${score}" data-rubric="${item.id}" />
+        <span class="rubric-score">${score}</span>
+      </label>
+    `;
+  }).join("");
+
+  const text = portfolioText();
+  els.portfolioCopy.innerHTML = escapeHtml(text);
+  els.fabricGuideSelect.value = school.fabricGuide || "cotton";
+  els.defectGuideSelect.value = school.defectGuide || "puckering";
+  els.machineGuideResult.innerHTML = `
+    <strong>${machine.label}</strong>
+    <dl>
+      <div><dt>机针</dt><dd>${escapeHtml(machine.needle)}</dd></div>
+      <div><dt>针距</dt><dd>${escapeHtml(machine.stitch)}</dd></div>
+      <div><dt>张力</dt><dd>${escapeHtml(machine.tension)}</dd></div>
+      <div><dt>压脚</dt><dd>${escapeHtml(machine.foot)}</dd></div>
+      <div><dt>整烫</dt><dd>${escapeHtml(machine.pressing)}</dd></div>
+    </dl>
+  `;
+  els.defectGuideResult.innerHTML = `
+    <strong>${defect.label}</strong>
+    <dl>
+      <div><dt>原因</dt><dd>${escapeHtml(defect.cause)}</dd></div>
+      <div><dt>处理</dt><dd>${escapeHtml(defect.fix)}</dd></div>
+    </dl>
+  `;
+  els.swatchBeforeInput.value = school.swatchBefore;
+  els.swatchAfterInput.value = school.swatchAfter;
+  els.swatchNoteInput.value = school.swatchNote || "";
+  els.swatchResult.innerHTML = `
+    <strong>${Math.abs(shrink).toFixed(2)}%</strong>
+    <span>${shrink >= 0 ? "缩水率" : "拉伸率"}参考值。裁剪前可以把关键部位预留到纸样或工艺单里。</span>
+    <span>${escapeHtml(school.swatchNote || "记录面料手感、厚薄、熨烫温度和是否起皱。")}</span>
+  `;
+}
+
 function renderStudioTabs() {
   $$("[data-studio-tab]").forEach((button) => {
     button.classList.toggle("active", button.dataset.studioTab === state.activeStudioTab);
@@ -1067,6 +1352,7 @@ function renderAll() {
   renderViews();
   renderProjectForm();
   renderDashboard();
+  renderSchool();
   renderFilters();
   renderChecks();
   renderFlow();
@@ -1085,6 +1371,27 @@ function updateProjectFromForm() {
   state.project.deadline = els.deadlineInput.value;
   state.project.complexity = els.complexitySelect.value;
   state.project.brief = els.briefInput.value;
+  saveState();
+  renderAll();
+}
+
+function updateSchoolFromForm() {
+  state.school.course = els.courseInput.value.trim();
+  state.school.teacher = els.teacherInput.value.trim();
+  state.school.assignment = els.assignmentInput.value.trim();
+  state.school.keywords = els.keywordsInput.value.trim();
+  state.school.presentation = els.presentationSelect.value;
+  state.school.concept = els.conceptInput.value;
+  saveState();
+  renderAll();
+}
+
+function updateSchoolTools() {
+  state.school.fabricGuide = els.fabricGuideSelect.value;
+  state.school.defectGuide = els.defectGuideSelect.value;
+  state.school.swatchBefore = Number(els.swatchBeforeInput.value);
+  state.school.swatchAfter = Number(els.swatchAfterInput.value);
+  state.school.swatchNote = els.swatchNoteInput.value;
   saveState();
   renderAll();
 }
@@ -1202,6 +1509,39 @@ function setupEvents() {
     saveState();
     renderAll();
   });
+
+  els.schoolForm.addEventListener("input", updateSchoolFromForm);
+  els.schoolForm.addEventListener("change", updateSchoolFromForm);
+
+  els.deliverableList.addEventListener("change", (event) => {
+    if (!event.target.matches("[data-deliverable]")) return;
+    state.school.deliverables[event.target.dataset.deliverable] = event.target.checked;
+    saveState();
+    renderAll();
+  });
+
+  $("#resetDeliverablesButton").addEventListener("click", () => {
+    state.school.deliverables = emptyDeliverables();
+    saveState();
+    renderAll();
+    toast("交付清单已重置");
+  });
+
+  els.rubricList.addEventListener("input", (event) => {
+    if (!event.target.matches("[data-rubric]")) return;
+    state.school.rubric[event.target.dataset.rubric] = Number(event.target.value);
+    saveState();
+    renderAll();
+  });
+
+  els.fabricGuideSelect.addEventListener("change", updateSchoolTools);
+  els.defectGuideSelect.addEventListener("change", updateSchoolTools);
+  [els.swatchBeforeInput, els.swatchAfterInput, els.swatchNoteInput].forEach((input) => {
+    input.addEventListener("input", updateSchoolTools);
+    input.addEventListener("change", updateSchoolTools);
+  });
+
+  $("#copyPortfolioButton").addEventListener("click", copyPortfolioText);
 
   els.checkGroups.addEventListener("change", (event) => {
     if (!event.target.matches("[data-check-id]")) return;
@@ -1436,6 +1776,7 @@ function readFileAsDataUrl(file) {
 async function copySummary() {
   const check = checkProgress();
   const steps = stepProgress();
+  const school = deliverableProgress();
   const pending = allChecks()
     .filter((item) => !state.checks[item.id] && item.severity === "high")
     .slice(0, 6)
@@ -1448,6 +1789,8 @@ async function copySummary() {
     `阶段：${phaseLabel(state.project.phase)}`,
     `防错完成：${check.done}/${check.total}`,
     `工序完成：${steps.done}/${steps.total}`,
+    `课业交付：${school.done}/${school.total}`,
+    `作业题目：${state.school.assignment || "未填写"}`,
     `重点部件：${state.project.components.map(componentLabel).join("、")}`,
     pending ? `待处理高风险：\n${pending}` : "待处理高风险：无",
     state.dailyNote ? `今日复盘：${state.dailyNote}` : ""
@@ -1460,6 +1803,16 @@ async function copySummary() {
     toast("项目摘要已复制");
   } catch {
     window.prompt("复制下面的项目摘要", text);
+  }
+}
+
+async function copyPortfolioText() {
+  const text = portfolioText();
+  try {
+    await navigator.clipboard.writeText(text);
+    toast("作品集文案已复制");
+  } catch {
+    window.prompt("复制下面的作品集文案", text);
   }
 }
 

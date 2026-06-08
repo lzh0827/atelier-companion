@@ -1,12 +1,11 @@
-const CACHE_NAME = "atelier-companion-v2";
+const CACHE_NAME = "atelier-companion-v3";
 const STATIC_ASSETS = [
   "./",
   "index.html",
   "styles.css",
   "app.js",
   "manifest.webmanifest",
-  "icon.svg",
-  "assets/fashion-template.png"
+  "icon.svg"
 ];
 
 self.addEventListener("install", (event) => {
